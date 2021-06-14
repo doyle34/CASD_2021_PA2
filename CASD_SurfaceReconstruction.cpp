@@ -139,24 +139,23 @@ namespace Topology
 				{
 				case QUADFACE:
 				{
-					if (!vertex_arr[i][j])
-						make_shared<Vertex>(offsettable[i][j]);
+					if (!vertex_arr[i][j]) vertex_arr[i][j] = make_shared<Vertex>(offsettable[i][j]);
 					
 					if (!LOWER_LIMIT)
 					{
-						vertex_arr[i + 1][j] = vertex_arr[i + 1][j] ? vertex_arr[i + 1][j] : make_shared<Vertex>(offsettable[i + 1][j]);
+						if (!vertex_arr[i + 1][j]) vertex_arr[i + 1][j] = make_shared<Vertex>(offsettable[i + 1][j]);
 						edge_arr[i][j][d] = make_shared<WingedEdge>();
 					}
 
 					if (!RIGHT_LIMIT)
 					{
-						vertex_arr[i][j + 1] = vertex_arr[i][j + 1] ? vertex_arr[i][j + 1] : make_shared<Vertex>(offsettable[i][j + 1]);
+						if (!vertex_arr[i][j + 1]) vertex_arr[i][j + 1] = make_shared<Vertex>(offsettable[i][j + 1]);
 						edge_arr[i][j][r] = make_shared<WingedEdge>();
 					}
 
 					if (!LOWER_LIMIT && !RIGHT_LIMIT)
 					{
-						vertex_arr[i + 1][j + 1] = vertex_arr[i + 1][j + 1] ? vertex_arr[i + 1][j + 1] : make_shared<Vertex>(offsettable[i + 1][j + 1]);
+						if (!vertex_arr[i + 1][j + 1]) vertex_arr[i + 1][j + 1] = make_shared<Vertex>(offsettable[i + 1][j + 1]);
 						edge_arr[i][j + 1][d] = make_shared<WingedEdge>();
 						edge_arr[i + 1][j][r] = make_shared<WingedEdge>();
 						face_arr[i][j] = make_shared<Face>(QUADFACE);
@@ -166,18 +165,17 @@ namespace Topology
 
 				case UPPER_LEFT_TRIFACE:
 				{
-					if (!vertex_arr[i][j])
-						make_shared<Vertex>(offsettable[i][j]);
+					if (!vertex_arr[i][j]) vertex_arr[i][j] = make_shared<Vertex>(offsettable[i][j]);
 
 					if (!LOWER_LIMIT)
 					{
-						vertex_arr[i + 1][j] = vertex_arr[i + 1][j] ? vertex_arr[i + 1][j] : make_shared<Vertex>(offsettable[i + 1][j]);
+						if (!vertex_arr[i + 1][j]) vertex_arr[i + 1][j] = make_shared<Vertex>(offsettable[i + 1][j]);
 						edge_arr[i][j][d] = make_shared<WingedEdge>();
 					}
 
 					if (!RIGHT_LIMIT)
 					{
-						vertex_arr[i][j + 1] = vertex_arr[i][j + 1] ? vertex_arr[i][j + 1] : make_shared<Vertex>(offsettable[i][j + 1]);
+						if (!vertex_arr[i][j + 1]) vertex_arr[i][j + 1] = make_shared<Vertex>(offsettable[i][j + 1]);
 						edge_arr[i][j][r] = make_shared<WingedEdge>();
 					}
 
@@ -192,17 +190,16 @@ namespace Topology
 
 				case LOWER_LEFT_TRIFACE:
 				{
-					if (!vertex_arr[i][j])
-						make_shared<Vertex>(offsettable[i][j]);
+					if (!vertex_arr[i][j]) vertex_arr[i][j] = make_shared<Vertex>(offsettable[i][j]);
 
 					if (!LOWER_LIMIT)
 					{
-						vertex_arr[i + 1][j] = vertex_arr[i + 1][j] ? vertex_arr[i + 1][j] : make_shared<Vertex>(offsettable[i + 1][j]);
+						if (!vertex_arr[i + 1][j]) vertex_arr[i + 1][j] = make_shared<Vertex>(offsettable[i + 1][j]);
 						edge_arr[i][j][d] = make_shared<WingedEdge>();
 
 						if (!RIGHT_LIMIT)
 						{
-							vertex_arr[i + 1][j + 1] = vertex_arr[i + 1][j + 1] ? vertex_arr[i + 1][j + 1] : make_shared<Vertex>(offsettable[i + 1][j + 1]);
+							if (!vertex_arr[i + 1][j + 1]) vertex_arr[i + 1][j + 1] = make_shared<Vertex>(offsettable[i + 1][j + 1]);
 							edge_arr[i][j][rd] = make_shared<WingedEdge>();
 							edge_arr[i + 1][j][r] = make_shared<WingedEdge>();
 							face_arr[i][j] = make_shared<Face>(LOWER_LEFT_TRIFACE);
@@ -213,15 +210,16 @@ namespace Topology
 
 				case UPPER_RIGHT_TRIFACE:
 				{
-					vertex_arr[i][j] = vertex_arr[i][j] ? vertex_arr[i][j] : make_shared<Vertex>(offsettable[i][j]);
+					if (!vertex_arr[i][j]) vertex_arr[i][j] = make_shared<Vertex>(offsettable[i][j]);
+
 					if (!RIGHT_LIMIT)
 					{
-						vertex_arr[i][j + 1] = vertex_arr[i][j + 1] ? vertex_arr[i][j + 1] : make_shared<Vertex>(offsettable[i][j + 1]);
+						if (!vertex_arr[i][j + 1]) vertex_arr[i][j + 1] = make_shared<Vertex>(offsettable[i][j + 1]);
 						edge_arr[i][j][r] = make_shared<WingedEdge>();
 
 						if (!LOWER_LIMIT)
 						{
-							vertex_arr[i + 1][j + 1] = vertex_arr[i + 1][j + 1] ? vertex_arr[i + 1][j + 1] : make_shared<Vertex>(offsettable[i + 1][j + 1]);
+							if (!vertex_arr[i + 1][j + 1]) vertex_arr[i + 1][j + 1] = make_shared<Vertex>(offsettable[i + 1][j + 1]);
 							edge_arr[i][j][rd] = make_shared<WingedEdge>();
 							edge_arr[i][j + 1][d] = make_shared<WingedEdge>();
 							face_arr[i][j] = make_shared<Face>(UPPER_RIGHT_TRIFACE);
@@ -233,18 +231,14 @@ namespace Topology
 				case LOWER_RIGHT_TRIFACE:
 				{
 					if (!LOWER_LIMIT)
-					{
-						vertex_arr[i + 1][j] = vertex_arr[i + 1][j] ? vertex_arr[i + 1][j] : make_shared<Vertex>(offsettable[i + 1][j]);
-					}
+						if (!vertex_arr[i + 1][j]) vertex_arr[i + 1][j] = make_shared<Vertex>(offsettable[i + 1][j]);
 
 					if (!RIGHT_LIMIT)
-					{
-						vertex_arr[i][j + 1] = vertex_arr[i][j + 1] ? vertex_arr[i][j + 1] : make_shared<Vertex>(offsettable[i][j + 1]);
-					}
+						if (!vertex_arr[i][j + 1]) vertex_arr[i][j + 1] = make_shared<Vertex>(offsettable[i][j + 1]);
 
 					if (!LOWER_LIMIT && !RIGHT_LIMIT)
 					{
-						vertex_arr[i + 1][j + 1] = vertex_arr[i + 1][j + 1] ? vertex_arr[i + 1][j + 1] : make_shared<Vertex>(offsettable[i + 1][j + 1]);
+						if (!vertex_arr[i + 1][j + 1]) vertex_arr[i + 1][j + 1] = make_shared<Vertex>(offsettable[i + 1][j + 1]);
 						edge_arr[i][j][ru] = make_shared<WingedEdge>();
 						edge_arr[i][j + 1][d] = make_shared<WingedEdge>();
 						edge_arr[i + 1][j][r] = make_shared<WingedEdge>();
@@ -257,22 +251,166 @@ namespace Topology
 		}
 	}
 
-	shared_ptr<Vertex> CheckVertexAndMake(shared_ptr<Vertex> v1, shared_ptr<Vertex> v2, Vector3f datapoint)
-	{
-		if (v1 == v2)
-		{
-
-		}
-	}
-
 	void BuildConnection(const vector<vector<FaceType>>& facetype,
 		vector<vector<shared_ptr<Vertex>>>& vertex_arr,
 		vector<vector<array<shared_ptr<WingedEdge>, 4>>>& edge_arr,
 		vector<vector<shared_ptr<Face>>>& face_arr)
 	{
+		int n = vertex_arr.size();
+		int m = vertex_arr[0].size();
+		enum { d = 0, r, ru, rd };
+		enum { START = 0, END = 1 };
+		enum { LEFTPREV = 0, LEFTNEXT = 1, RIGHTPREV = 2, RIGHTNEXT = 3 };
+		enum { LEFT = 0, RIGHT = 1};
 
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < m; j++)
+			{
+				bool UPPER_LIMIT = i == 0;
+				bool LOWER_LIMIT = i == n - 1;
+				bool LEFT_LIMIT = j == 0;
+				bool RIGHT_LIMIT = j == m - 1;
 
+				// evaluate downward edge
+				auto& edge_d = edge_arr[i][j][d];
+				// set start and end vertex
+				if (!LOWER_LIMIT)
+				{
+					edge_d->vertex[START] = vertex_arr[i][j];
+					edge_d->vertex[END] = vertex_arr[i + 1][j];
+				}
+				// set left face
+				if (!RIGHT_LIMIT)
+					if (facetype[i][j] != UPPER_RIGHT_TRIFACE && facetype[i][j] != LOWER_RIGHT_TRIFACE)
+						edge_d->face[LEFT] = face_arr[i][j];
+
+				// set right face
+				if (!LEFT_LIMIT)
+					if (facetype[i][j - 1] != UPPER_LEFT_TRIFACE && facetype[i][j - 1] != LOWER_LEFT_TRIFACE)
+						edge_d->face[RIGHT] = face_arr[i][j - 1];
+
+				// set left prev, next edge
+				if (!LOWER_LIMIT && !RIGHT_LIMIT)
+				{
+					switch (edge_d->face[LEFT]->facetype)
+					{
+					case QUADFACE:
+					{
+						edge_d->edge[LEFTPREV] = edge_arr[i + 1][j][r];
+						edge_d->edge[LEFTNEXT] = edge_arr[i][j][r];
+					} break;
+					
+					case UPPER_LEFT_TRIFACE:
+					{
+						edge_d->edge[LEFTPREV] = edge_arr[i][j][ru];
+						edge_d->edge[LEFTNEXT] = edge_arr[i][j][r];
+					} break;
+					
+					case LOWER_LEFT_TRIFACE:
+					{
+						edge_d->edge[LEFTPREV] = edge_arr[i + 1][j][r];
+						edge_d->edge[LEFTNEXT] = edge_arr[i][j][rd];
+					} break;
+					}
+				}
+
+				// set right prev, next edge
+				if (!LOWER_LIMIT && !LEFT_LIMIT)
+				{
+					switch (edge_d->face[RIGHT]->facetype)
+					{
+					case QUADFACE:
+					{
+						edge_d->edge[RIGHTPREV] = edge_arr[i][j - 1][r];
+						edge_d->edge[RIGHTNEXT] = edge_arr[i + 1][j - 1][r];
+					} break;
+
+					case UPPER_RIGHT_TRIFACE:
+					{
+						edge_d->edge[RIGHTPREV] = edge_arr[i][j - 1][r];
+						edge_d->edge[RIGHTNEXT] = edge_arr[i][j - 1][rd];
+					} break;
+
+					case LOWER_RIGHT_TRIFACE:
+					{
+						edge_d->edge[RIGHTPREV] = edge_arr[i][j - 1][ru];
+						edge_d->edge[RIGHTNEXT] = edge_arr[i + 1][j - 1][r];
+					} break;
+					}
+				}
+
+				// evaluate right edge
+				auto& edge_r = edge_arr[i][j][r];
+
+				// set start and end vertex
+				if (!RIGHT_LIMIT)
+				{
+					edge_r->vertex[START] = vertex_arr[i][j];
+					edge_r->vertex[END] = vertex_arr[i][j + 1];
+				}
+				// set left face
+				if (!UPPER_LIMIT)
+					if (facetype[i - 1][j] != UPPER_RIGHT_TRIFACE && facetype[i - 1][j] != UPPER_LEFT_TRIFACE)
+						edge_r->face[LEFT] = face_arr[i - 1][j];
+
+				// set right face
+				if (!LOWER_LIMIT)
+					if (facetype[i][j] != LOWER_RIGHT_TRIFACE && facetype[i][j] != LOWER_LEFT_TRIFACE)
+						edge_r->face[RIGHT] = face_arr[i][j];
+
+				// set left prev, next edge
+				if (!UPPER_LIMIT && !LOWER_LIMIT)
+				{
+					switch (edge_r->face[LEFT]->facetype)
+					{
+					case QUADFACE:
+					{
+						edge_r->edge[LEFTPREV] = edge_arr[i - 1][j + 1][d];
+						edge_r->edge[LEFTNEXT] = edge_arr[i - 1][j][d];
+					} break;
+
+					case LOWER_RIGHT_TRIFACE:
+					{
+						edge_r->edge[LEFTPREV] = edge_arr[i - 1][j + 1][d];
+						edge_r->edge[LEFTNEXT] = edge_arr[i - 1][j][ru];
+					} break;
+
+					case LOWER_LEFT_TRIFACE:
+					{
+						edge_r->edge[LEFTPREV] = edge_arr[i - 1][j][rd];
+						edge_r->edge[LEFTNEXT] = edge_arr[i - 1][j][d];
+					} break;
+					}
+				}
+
+				// set right prev, next edge
+				if (!LOWER_LIMIT && !LEFT_LIMIT)
+				{
+					switch (edge_r->face[RIGHT]->facetype)
+					{
+					case QUADFACE:
+					{
+						edge_r->edge[RIGHTPREV] = edge_arr[i][j][d];
+						edge_r->edge[RIGHTNEXT] = edge_arr[i][j + 1][d];
+					} break;
+
+					case UPPER_RIGHT_TRIFACE:
+					{
+						edge_r->edge[RIGHTPREV] = edge_arr[i][j][rd];
+						edge_r->edge[RIGHTNEXT] = edge_arr[i][j + 1][d];
+					} break;
+
+					case UPPER_LEFT_TRIFACE:
+					{
+						edge_r->edge[RIGHTPREV] = edge_arr[i][j][d];
+						edge_r->edge[RIGHTNEXT] = edge_arr[i][j][ru];
+					} break;
+					}
+				}
+
+				// evaluate right upper edge
+			}
+		}
 	}
-
-
 }

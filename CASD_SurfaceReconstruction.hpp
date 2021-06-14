@@ -67,11 +67,9 @@ namespace Topology
 	class WingedEdge
 	{
 	public:
-		shared_ptr<Edge> selfedge = nullptr;
 		array<shared_ptr<Vertex>, 2> vertex = { { nullptr, nullptr } };
-		enum { Start = 0, End = 1 };
 		array<shared_ptr<WingedEdge>, 4> edge = { { nullptr, nullptr, nullptr, nullptr } };
-		enum { LeftPrev = 0, LeftNext = 1, RightPrev = 2, RightNext = 3 };
+		array<shared_ptr<Face>, 2> face = { { nullptr, nullptr } };
 		WingedEdge() {};
 		~WingedEdge() {};
 	};
