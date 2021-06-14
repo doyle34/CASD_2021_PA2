@@ -8,6 +8,7 @@
 
 using namespace Eigen;
 using namespace std;
+using namespace Geometry;
 
 vector<vector<Vector3f>> ReadOffSetTable(string filename)
 {
@@ -55,4 +56,25 @@ vector<vector<Vector3f>> ReadOffSetTable(string filename)
 
 	return offsettabledata;
 
+}
+
+namespace Topology
+{
+	TopologyModel BuildTopology(vector<vector<Vector3f>> offsettable)
+	{
+		int n = offsettable.size();
+		int m = offsettable[0].size();
+			
+		vector<vector<shared_ptr<Vertex>>> raw_vertexlist(n,
+			vector<shared_ptr<Vertex>>(m, nullptr));
+		enum { d = 0, r, ru, rd };
+		vector<vector<array<shared_ptr<WingedEdge>, 4>>> raw_edgelist(n,
+			vector<array<shared_ptr<WingedEdge>, 4>>(m,
+				array<shared_ptr<WingedEdge>, 4>({ nullptr, nullptr, nullptr, nullptr })));
+
+		vector<vector<shared_ptr<Face>>> raw_facelist(n,
+			vector<shared_ptr<Face>>(m, nullptr));
+
+
+	}
 }
