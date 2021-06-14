@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <array>
-#include <memory>
+// #include <memory>
 #include <Eigen/Dense>
 
 using namespace Eigen;
@@ -22,7 +22,12 @@ namespace Topology
 	public:
 		shared_ptr<Vector3f> point = nullptr;
 		shared_ptr<Vector3f> normal = nullptr;
+		enum { x = 0, y = 1, z = 2 };
 		Vertex() {};
+		Vertex(Vector3f p)
+		{
+			this->point = make_shared<Vector3f>(p);
+		}
 		~Vertex() {};
 	};
 
@@ -38,23 +43,25 @@ namespace Topology
 	class Face
 	{
 	public:
-
-	};
-
-	class TriFace : Face
-	{
-	public:
-		array<shared_ptr<Edge>, 3> edge = { { nullptr, nullptr, nullptr } };
+		FaceType facetype = NULLFACE;
+		vector<shared_ptr<WingedEdge>> edge;
 		shared_ptr<Geometry::CubicSurface> surface = nullptr;
-
-	};
-
-	class QuadFace : Face
-	{
-	public:
-		array<shared_ptr<Edge>, 4> edge = { { nullptr, nullptr, nullptr, nullptr } };
-		shared_ptr<Geometry::CubicSurface> surface = nullptr;
-
+		Face() {};
+		Face(FaceType ty)
+		{
+			if (ty == QUADFACE)
+			{
+				this->edge.resize(4);
+				this->facetype = ty;
+			}
+			else if (ty == NULLFACE) this->facetype = ty;
+			else
+			{
+				this->edge.resize(3);
+				this->facetype = ty;
+			}
+		}
+		~Face() {};
 	};
 
 	class WingedEdge
@@ -77,6 +84,16 @@ namespace Topology
 		vector<shared_ptr<Face>> faces;
 		TopologyModel() {};
 		~TopologyModel() {};
+	};
+
+	enum FaceType
+	{
+		QUADFACE,
+		UPPER_LEFT_TRIFACE,
+		LOWER_LEFT_TRIFACE,
+		UPPER_RIGHT_TRIFACE,
+		LOWER_RIGHT_TRIFACE,
+		NULLFACE
 	};
 }
 
