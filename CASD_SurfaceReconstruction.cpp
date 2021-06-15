@@ -79,7 +79,23 @@ namespace Topology
 
 		vector<vector<FaceType>> facetype = EvaluateFaceTypes(offsettable);
 		InitializeTopology(offsettable, facetype, vertex_arr, edge_arr, face_arr);
+		BuildConnection(facetype, vertex_arr, edge_arr, face_arr);
 
+		TopologyModel model;
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < m; j++)
+			{
+				if (vertex_arr[i][j]) model.vertices.push_back(vertex_arr[i][j]);
+				if (face_arr[i][j]) model.faces.push_back(face_arr[i][j]);
+				for (int k = 0; k < 4; k++)
+					if (edge_arr[i][j][k]) model.edges.push_back(edge_arr[i][j][k]);
+			}
+		}
+
+		SetFaceEdges(model);
+
+		return model;
 	}
 
 	vector<vector<FaceType>> EvaluateFaceTypes(vector<vector<Vector3f>> datapoints)
@@ -274,142 +290,282 @@ namespace Topology
 
 				// evaluate downward edge
 				auto& edge_d = edge_arr[i][j][d];
-				// set start and end vertex
-				if (!LOWER_LIMIT)
-				{
-					edge_d->vertex[START] = vertex_arr[i][j];
-					edge_d->vertex[END] = vertex_arr[i + 1][j];
-				}
-				// set left face
-				if (!RIGHT_LIMIT)
-					if (facetype[i][j] != UPPER_RIGHT_TRIFACE && facetype[i][j] != LOWER_RIGHT_TRIFACE)
-						edge_d->face[LEFT] = face_arr[i][j];
 
-				// set right face
-				if (!LEFT_LIMIT)
-					if (facetype[i][j - 1] != UPPER_LEFT_TRIFACE && facetype[i][j - 1] != LOWER_LEFT_TRIFACE)
-						edge_d->face[RIGHT] = face_arr[i][j - 1];
-
-				// set left prev, next edge
-				if (!LOWER_LIMIT && !RIGHT_LIMIT)
+				if (!edge_d)
 				{
-					switch (edge_d->face[LEFT]->facetype)
+					// set start and end vertex
+					if (!LOWER_LIMIT)
 					{
-					case QUADFACE:
-					{
-						edge_d->edge[LEFTPREV] = edge_arr[i + 1][j][r];
-						edge_d->edge[LEFTNEXT] = edge_arr[i][j][r];
-					} break;
-					
-					case UPPER_LEFT_TRIFACE:
-					{
-						edge_d->edge[LEFTPREV] = edge_arr[i][j][ru];
-						edge_d->edge[LEFTNEXT] = edge_arr[i][j][r];
-					} break;
-					
-					case LOWER_LEFT_TRIFACE:
-					{
-						edge_d->edge[LEFTPREV] = edge_arr[i + 1][j][r];
-						edge_d->edge[LEFTNEXT] = edge_arr[i][j][rd];
-					} break;
+						edge_d->vertex[START] = vertex_arr[i][j];
+						edge_d->vertex[END] = vertex_arr[i + 1][j];
 					}
-				}
+					// set left face
+					if (!RIGHT_LIMIT)
+						if (facetype[i][j] != UPPER_RIGHT_TRIFACE && facetype[i][j] != LOWER_RIGHT_TRIFACE)
+							edge_d->face[LEFT] = face_arr[i][j];
 
-				// set right prev, next edge
-				if (!LOWER_LIMIT && !LEFT_LIMIT)
-				{
-					switch (edge_d->face[RIGHT]->facetype)
-					{
-					case QUADFACE:
-					{
-						edge_d->edge[RIGHTPREV] = edge_arr[i][j - 1][r];
-						edge_d->edge[RIGHTNEXT] = edge_arr[i + 1][j - 1][r];
-					} break;
+					// set right face
+					if (!LEFT_LIMIT)
+						if (facetype[i][j - 1] != UPPER_LEFT_TRIFACE && facetype[i][j - 1] != LOWER_LEFT_TRIFACE)
+							edge_d->face[RIGHT] = face_arr[i][j - 1];
 
-					case UPPER_RIGHT_TRIFACE:
+					// set left prev, next edge
+					if (!LOWER_LIMIT && !RIGHT_LIMIT)
 					{
-						edge_d->edge[RIGHTPREV] = edge_arr[i][j - 1][r];
-						edge_d->edge[RIGHTNEXT] = edge_arr[i][j - 1][rd];
-					} break;
+						switch (edge_d->face[LEFT]->facetype)
+						{
+						case QUADFACE:
+						{
+							edge_d->edge[LEFTPREV] = edge_arr[i + 1][j][r];
+							edge_d->edge[LEFTNEXT] = edge_arr[i][j][r];
+						} break;
 
-					case LOWER_RIGHT_TRIFACE:
+						case UPPER_LEFT_TRIFACE:
+						{
+							edge_d->edge[LEFTPREV] = edge_arr[i][j][ru];
+							edge_d->edge[LEFTNEXT] = edge_arr[i][j][r];
+						} break;
+
+						case LOWER_LEFT_TRIFACE:
+						{
+							edge_d->edge[LEFTPREV] = edge_arr[i + 1][j][r];
+							edge_d->edge[LEFTNEXT] = edge_arr[i][j][rd];
+						} break;
+						}
+					}
+
+					// set right prev, next edge
+					if (!LOWER_LIMIT && !LEFT_LIMIT)
 					{
-						edge_d->edge[RIGHTPREV] = edge_arr[i][j - 1][ru];
-						edge_d->edge[RIGHTNEXT] = edge_arr[i + 1][j - 1][r];
-					} break;
+						switch (edge_d->face[RIGHT]->facetype)
+						{
+						case QUADFACE:
+						{
+							edge_d->edge[RIGHTPREV] = edge_arr[i][j - 1][r];
+							edge_d->edge[RIGHTNEXT] = edge_arr[i + 1][j - 1][r];
+						} break;
+
+						case UPPER_RIGHT_TRIFACE:
+						{
+							edge_d->edge[RIGHTPREV] = edge_arr[i][j - 1][r];
+							edge_d->edge[RIGHTNEXT] = edge_arr[i][j - 1][rd];
+						} break;
+
+						case LOWER_RIGHT_TRIFACE:
+						{
+							edge_d->edge[RIGHTPREV] = edge_arr[i][j - 1][ru];
+							edge_d->edge[RIGHTNEXT] = edge_arr[i + 1][j - 1][r];
+						} break;
+						}
 					}
 				}
 
 				// evaluate right edge
 				auto& edge_r = edge_arr[i][j][r];
 
-				// set start and end vertex
-				if (!RIGHT_LIMIT)
+				if (!edge_r)
 				{
-					edge_r->vertex[START] = vertex_arr[i][j];
-					edge_r->vertex[END] = vertex_arr[i][j + 1];
-				}
-				// set left face
-				if (!UPPER_LIMIT)
-					if (facetype[i - 1][j] != UPPER_RIGHT_TRIFACE && facetype[i - 1][j] != UPPER_LEFT_TRIFACE)
-						edge_r->face[LEFT] = face_arr[i - 1][j];
-
-				// set right face
-				if (!LOWER_LIMIT)
-					if (facetype[i][j] != LOWER_RIGHT_TRIFACE && facetype[i][j] != LOWER_LEFT_TRIFACE)
-						edge_r->face[RIGHT] = face_arr[i][j];
-
-				// set left prev, next edge
-				if (!UPPER_LIMIT && !LOWER_LIMIT)
-				{
-					switch (edge_r->face[LEFT]->facetype)
+					// set start and end vertex
+					if (!RIGHT_LIMIT)
 					{
-					case QUADFACE:
-					{
-						edge_r->edge[LEFTPREV] = edge_arr[i - 1][j + 1][d];
-						edge_r->edge[LEFTNEXT] = edge_arr[i - 1][j][d];
-					} break;
+						edge_r->vertex[START] = vertex_arr[i][j];
+						edge_r->vertex[END] = vertex_arr[i][j + 1];
+					}
+					// set left face
+					if (!UPPER_LIMIT)
+						if (facetype[i - 1][j] != UPPER_RIGHT_TRIFACE && facetype[i - 1][j] != UPPER_LEFT_TRIFACE)
+							edge_r->face[LEFT] = face_arr[i - 1][j];
 
-					case LOWER_RIGHT_TRIFACE:
-					{
-						edge_r->edge[LEFTPREV] = edge_arr[i - 1][j + 1][d];
-						edge_r->edge[LEFTNEXT] = edge_arr[i - 1][j][ru];
-					} break;
+					// set right face
+					if (!LOWER_LIMIT)
+						if (facetype[i][j] != LOWER_RIGHT_TRIFACE && facetype[i][j] != LOWER_LEFT_TRIFACE)
+							edge_r->face[RIGHT] = face_arr[i][j];
 
-					case LOWER_LEFT_TRIFACE:
+					// set left prev, next edge
+					if (!UPPER_LIMIT && !LOWER_LIMIT)
 					{
-						edge_r->edge[LEFTPREV] = edge_arr[i - 1][j][rd];
-						edge_r->edge[LEFTNEXT] = edge_arr[i - 1][j][d];
-					} break;
+						switch (edge_r->face[LEFT]->facetype)
+						{
+						case QUADFACE:
+						{
+							edge_r->edge[LEFTPREV] = edge_arr[i - 1][j + 1][d];
+							edge_r->edge[LEFTNEXT] = edge_arr[i - 1][j][d];
+						} break;
+
+						case LOWER_RIGHT_TRIFACE:
+						{
+							edge_r->edge[LEFTPREV] = edge_arr[i - 1][j + 1][d];
+							edge_r->edge[LEFTNEXT] = edge_arr[i - 1][j][ru];
+						} break;
+
+						case LOWER_LEFT_TRIFACE:
+						{
+							edge_r->edge[LEFTPREV] = edge_arr[i - 1][j][rd];
+							edge_r->edge[LEFTNEXT] = edge_arr[i - 1][j][d];
+						} break;
+						}
+					}
+
+					// set right prev, next edge
+					if (!LOWER_LIMIT && !LEFT_LIMIT)
+					{
+						switch (edge_r->face[RIGHT]->facetype)
+						{
+						case QUADFACE:
+						{
+							edge_r->edge[RIGHTPREV] = edge_arr[i][j][d];
+							edge_r->edge[RIGHTNEXT] = edge_arr[i][j + 1][d];
+						} break;
+
+						case UPPER_RIGHT_TRIFACE:
+						{
+							edge_r->edge[RIGHTPREV] = edge_arr[i][j][rd];
+							edge_r->edge[RIGHTNEXT] = edge_arr[i][j + 1][d];
+						} break;
+
+						case UPPER_LEFT_TRIFACE:
+						{
+							edge_r->edge[RIGHTPREV] = edge_arr[i][j][d];
+							edge_r->edge[RIGHTNEXT] = edge_arr[i][j][ru];
+						} break;
+						}
 					}
 				}
-
-				// set right prev, next edge
-				if (!LOWER_LIMIT && !LEFT_LIMIT)
-				{
-					switch (edge_r->face[RIGHT]->facetype)
-					{
-					case QUADFACE:
-					{
-						edge_r->edge[RIGHTPREV] = edge_arr[i][j][d];
-						edge_r->edge[RIGHTNEXT] = edge_arr[i][j + 1][d];
-					} break;
-
-					case UPPER_RIGHT_TRIFACE:
-					{
-						edge_r->edge[RIGHTPREV] = edge_arr[i][j][rd];
-						edge_r->edge[RIGHTNEXT] = edge_arr[i][j + 1][d];
-					} break;
-
-					case UPPER_LEFT_TRIFACE:
-					{
-						edge_r->edge[RIGHTPREV] = edge_arr[i][j][d];
-						edge_r->edge[RIGHTNEXT] = edge_arr[i][j][ru];
-					} break;
-					}
-				}
+				
 
 				// evaluate right upper edge
+				auto& edge_ru = edge_arr[i][j][ru];
+
+				if (!edge_ru)
+				{
+					// set start and end vertex
+					if (!LOWER_LIMIT && !RIGHT_LIMIT)
+					{
+						edge_ru->vertex[START] = vertex_arr[i + 1][j];
+						edge_ru->vertex[END] = vertex_arr[i][j + 1];
+					}
+					// set left face
+					if (facetype[i][j] == UPPER_LEFT_TRIFACE)
+						edge_ru->face[LEFT] = face_arr[i][j];
+
+					// set right face
+					if (facetype[i][j] == LOWER_RIGHT_TRIFACE)
+						edge_ru->face[RIGHT] = face_arr[i][j];
+
+					// set left/right prev, next edge
+					if (!UPPER_LIMIT && !LOWER_LIMIT)
+					{
+						edge_ru->edge[LEFTPREV] = edge_arr[i][j][r];
+						edge_ru->edge[LEFTNEXT] = edge_arr[i][j][d];
+						edge_ru->edge[RIGHTPREV] = edge_arr[i + 1][j][r];
+						edge_ru->edge[RIGHTNEXT] = edge_arr[i][j + 1][d];
+					}
+				}
+				
+				// evaluate right down edge
+				auto& edge_rd = edge_arr[i][j][rd];
+
+				if (!edge_rd)
+				{
+					// set start and end vertex
+					if (!LOWER_LIMIT && !RIGHT_LIMIT)
+					{
+						edge_ru->vertex[START] = vertex_arr[i][j];
+						edge_ru->vertex[END] = vertex_arr[i + 1][j + 1];
+					}
+					// set left face
+					if (facetype[i][j] == UPPER_RIGHT_TRIFACE)
+						edge_ru->face[LEFT] = face_arr[i][j];
+
+					// set right face
+					if (facetype[i][j] == LOWER_LEFT_TRIFACE)
+						edge_ru->face[RIGHT] = face_arr[i][j];
+
+					// set left/right prev, next edge
+					if (!UPPER_LIMIT && !LOWER_LIMIT)
+					{
+						edge_ru->edge[LEFTPREV] = edge_arr[i][j + 1][d];
+						edge_ru->edge[LEFTNEXT] = edge_arr[i][j][r];
+						edge_ru->edge[RIGHTPREV] = edge_arr[i][j][d];
+						edge_ru->edge[RIGHTNEXT] = edge_arr[i + 1][j][r];
+					}
+				}
+			}
+		}
+	}
+
+	void SetFaceEdges(TopologyModel& model)
+	{
+		enum { d = 0, r, ru, rd };
+		enum { START = 0, END = 1 };
+		enum { LEFTPREV = 0, LEFTNEXT = 1, RIGHTPREV = 2, RIGHTNEXT = 3 };
+		enum { LEFT = 0, RIGHT = 1 };
+
+		for (auto& edge : model.edges)
+		{
+			for (auto& face : model.faces)
+			{
+				int face_dir = 0;
+				int edge_dir = 0;
+				if (edge->face[LEFT] == face)
+				{
+					face_dir = LEFT;
+					edge_dir = LEFTNEXT;
+				}
+				else if (edge->face[RIGHT] == face)
+				{
+					face_dir = RIGHT;
+					edge_dir = RIGHTNEXT;
+				}
+				else
+					continue;
+
+				shared_ptr<WingedEdge> current = edge;
+
+				int n_edge = 0;
+				if (edge->face[face_dir]->facetype == QUADFACE)
+					n_edge = 4;
+				else if (edge->face[face_dir]->facetype == NULLFACE) {}
+				else
+					n_edge = 3;
+
+				for (int k = 0; k < n_edge; k++)
+				{
+					face->edges[k] = current;
+					current = current->edge[edge_dir];
+				}
+			}
+		}
+	}
+
+}
+
+namespace Geometry
+{
+	void ComputeTriSurfaceCP()
+	{
+		
+	}
+
+	void ComputeQuadSurfaceCP()
+	{
+
+	}
+
+	void ComputeCurveCP(Topology::WingedEdge& edge)
+	{
+
+	}
+
+	void ComputeAllFaceSurface(Topology::TopologyModel& model)
+	{
+		for (auto& face : model.faces)
+		{
+			if (face->surface) continue;
+
+			for (auto& edge : face->edges)
+			{
+
 			}
 		}
 	}

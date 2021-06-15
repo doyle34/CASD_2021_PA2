@@ -2,7 +2,7 @@
 #define EIGEN_INITIALIZE_MATRICES_BY_ZERO
 #endif
 
-#include <memory>
+// #include <memory>
 #include "CASD_SurfaceReconstruction.hpp"
 
 #define Cos(th) cos(acos(-1.0)/180.0*(th))

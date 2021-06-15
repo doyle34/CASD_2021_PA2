@@ -44,20 +44,20 @@ namespace Topology
 	{
 	public:
 		FaceType facetype = NULLFACE;
-		vector<shared_ptr<WingedEdge>> edge;
+		vector<shared_ptr<WingedEdge>> edges;
 		shared_ptr<Geometry::CubicSurface> surface = nullptr;
 		Face() {};
 		Face(FaceType ty)
 		{
 			if (ty == QUADFACE)
 			{
-				this->edge.resize(4);
+				this->edges.resize(4);
 				this->facetype = ty;
 			}
 			else if (ty == NULLFACE) this->facetype = ty;
 			else
 			{
-				this->edge.resize(3);
+				this->edges.resize(3);
 				this->facetype = ty;
 			}
 		}
@@ -67,6 +67,7 @@ namespace Topology
 	class WingedEdge
 	{
 	public:
+		shared_ptr<Geometry::CubicCurve> curve = nullptr;
 		array<shared_ptr<Vertex>, 2> vertex = { { nullptr, nullptr } };
 		array<shared_ptr<WingedEdge>, 4> edge = { { nullptr, nullptr, nullptr, nullptr } };
 		array<shared_ptr<Face>, 2> face = { { nullptr, nullptr } };
@@ -114,6 +115,12 @@ namespace Geometry
 
 		shared_ptr<Vector3f> ComputePointOnSurface();
 	};
+
+	void ComputeTriSurfaceCP();
+
+	void ComputeQuadSurfaceCP();
+
+	void ComputeCurveCP();
 }
 
 void Visualization(int argc, char* argv[]);
