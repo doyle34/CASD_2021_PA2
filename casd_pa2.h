@@ -79,7 +79,5 @@ namespace CASD_PA2
 
 	void DrawCP(const TopologyModel& model);
 
-	// void DrawShip();
-
 	void Visualization(int argc, char* argv[]);
 }

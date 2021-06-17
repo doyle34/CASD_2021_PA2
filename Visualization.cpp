@@ -38,7 +38,7 @@ namespace CASD_PA2
 			float AspectRatio = 1.0;
 		} Camera;
 
-		struct { ////////////////////////////////////////////////////////////////////
+		struct {
 			int width = 1280;
 			int height = 720 - 100;
 			string windowName = "CASD Offset Table Surface Reconstruction";

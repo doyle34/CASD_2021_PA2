@@ -79,16 +79,6 @@ namespace CASD_PA2
 		~WingedEdge() {};
 	};
 
-	//class TopologyModel
-	//{
-	//public:
-	//	vector<shared_ptr<Vertex>> vertices;
-	//	vector<shared_ptr<WingedEdge>> edges;
-	//	vector<shared_ptr<Face>> faces;
-	//	TopologyModel() {};
-	//	~TopologyModel() {};
-	//};
-
 	TopologyModel BuildTopology(vector<vector<Vector3f>> offsettable)
 	{
 		int n = offsettable.size();
@@ -883,38 +873,6 @@ namespace CASD_PA2
 		}
 	}
 
-	//void ComputeCurveCP(shared_ptr<WingedEdge>& edge)
-	//{
-	//	edge->curve = make_shared<CubicCurve>();
-	//	enum { START = 0, END = 1 };
-	//	float tmp_1 = 0.0f;
-	//	float tmp_2 = 0.0f;
-	//	Vector3f start = *edge->vertex[START]->point;
-	//	Vector3f start_n = *edge->vertex[START]->normal;
-	//	Vector3f end = *edge->vertex[END]->point;
-	//	Vector3f end_n = *edge->vertex[END]->point;
-
-	//	Vector3f a = end - start;
-	//	Vector3f an = a.dot(start_n) / start_n.norm() * start_n.normalized();
-	//	Vector3f ap = a - an;
-	//	tmp_1 = a.norm() * a.norm();
-	//	tmp_2 = 3 * ap.dot(a);
-	//	Vector3f p = (tmp_1 / tmp_2) * ap;
-
-	//	Vector3f b = start - end;
-	//	Vector3f bn = b.dot(end_n) / end_n.norm() * end_n.normalized();
-	//	Vector3f bp = b - bn;
-	//	tmp_1 = b.norm() * b.norm();
-	//	tmp_2 = 3 * bp.dot(b);
-	//	Vector3f q = (tmp_1 / tmp_2) * bp;
-
-	//	edge->curve->control_points.push_back(start);
-	//	edge->curve->control_points.push_back(p);
-	//	edge->curve->control_points.push_back(q);
-	//	edge->curve->control_points.push_back(end);
-
-	//}
-
 	void ComputeCurveCP(shared_ptr<WingedEdge>& edge)
 	{
 		edge->curve = make_shared<CubicCurve>();
@@ -1088,13 +1046,4 @@ namespace CASD_PA2
 
 		glEnd();
 	}
-	//void DrawShip()
-	//{
-
-	//}
-
-	//void Visualization(int argc, char* argv[])
-	//{
-
-	//}
 }
