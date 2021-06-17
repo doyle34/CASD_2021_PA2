@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CASD_SurfaceReconstruction.hpp">
+    <ClInclude Include="casd_pa2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -26,10 +26,7 @@
     <ClCompile Include="Visualization.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="functions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CASD_SurfaceReconstruction.cpp">
+    <ClCompile Include="casd_pa2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
