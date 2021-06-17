@@ -346,20 +346,20 @@ namespace CASD_PA2
 							{
 							case QUADFACE:
 							{
-								edge_d->edge[LEFTPREV] = edge_arr[i + 1][j][r];
-								edge_d->edge[LEFTNEXT] = edge_arr[i][j][r];
+								edge_d->edge[LEFTNEXT] = edge_arr[i + 1][j][r];
+								edge_d->edge[LEFTPREV] = edge_arr[i][j][r];
 							} break;
 
 							case UPPER_LEFT_TRIFACE:
 							{
-								edge_d->edge[LEFTPREV] = edge_arr[i][j][ru];
-								edge_d->edge[LEFTNEXT] = edge_arr[i][j][r];
+								edge_d->edge[LEFTNEXT] = edge_arr[i][j][ru];
+								edge_d->edge[LEFTPREV] = edge_arr[i][j][r];
 							} break;
 
 							case LOWER_LEFT_TRIFACE:
 							{
-								edge_d->edge[LEFTPREV] = edge_arr[i + 1][j][r];
-								edge_d->edge[LEFTNEXT] = edge_arr[i][j][rd];
+								edge_d->edge[LEFTNEXT] = edge_arr[i + 1][j][r];
+								edge_d->edge[LEFTPREV] = edge_arr[i][j][rd];
 							} break;
 							}
 						}
@@ -425,20 +425,20 @@ namespace CASD_PA2
 							{
 							case QUADFACE:
 							{
-								edge_r->edge[LEFTPREV] = edge_arr[i - 1][j + 1][d];
-								edge_r->edge[LEFTNEXT] = edge_arr[i - 1][j][d];
+								edge_r->edge[LEFTNEXT] = edge_arr[i - 1][j + 1][d];
+								edge_r->edge[LEFTPREV] = edge_arr[i - 1][j][d];
 							} break;
 
 							case LOWER_RIGHT_TRIFACE:
 							{
-								edge_r->edge[LEFTPREV] = edge_arr[i - 1][j + 1][d];
-								edge_r->edge[LEFTNEXT] = edge_arr[i - 1][j][ru];
+								edge_r->edge[LEFTNEXT] = edge_arr[i - 1][j + 1][d];
+								edge_r->edge[LEFTPREV] = edge_arr[i - 1][j][ru];
 							} break;
 
 							case LOWER_LEFT_TRIFACE:
 							{
-								edge_r->edge[LEFTPREV] = edge_arr[i - 1][j][rd];
-								edge_r->edge[LEFTNEXT] = edge_arr[i - 1][j][d];
+								edge_r->edge[LEFTNEXT] = edge_arr[i - 1][j][rd];
+								edge_r->edge[LEFTPREV] = edge_arr[i - 1][j][d];
 							} break;
 							}
 						}
@@ -495,8 +495,8 @@ namespace CASD_PA2
 						edge_ru->face[RIGHT] = face_arr[i][j];
 
 					// set left/right prev, next edge
-					edge_ru->edge[LEFTPREV] = edge_arr[i][j][r];
-					edge_ru->edge[LEFTNEXT] = edge_arr[i][j][d];
+					edge_ru->edge[LEFTNEXT] = edge_arr[i][j][r];
+					edge_ru->edge[LEFTPREV] = edge_arr[i][j][d];
 					if (!LOWER_LIMIT)
 						edge_ru->edge[RIGHTPREV] = edge_arr[i + 1][j][r];
 					if (!RIGHT_LIMIT)
@@ -524,8 +524,8 @@ namespace CASD_PA2
 
 					// set left/right prev, next edge
 					if (!RIGHT_LIMIT)
-						edge_rd->edge[LEFTPREV] = edge_arr[i][j + 1][d];
-					edge_rd->edge[LEFTNEXT] = edge_arr[i][j][r];
+						edge_rd->edge[LEFTNEXT] = edge_arr[i][j + 1][d];
+					edge_rd->edge[LEFTPREV] = edge_arr[i][j][r];
 					edge_rd->edge[RIGHTPREV] = edge_arr[i][j][d];
 					if (!LOWER_LIMIT)
 						edge_rd->edge[RIGHTNEXT] = edge_arr[i + 1][j][r];
@@ -554,7 +554,7 @@ namespace CASD_PA2
 					if (edge->face[LEFT] == face)
 					{
 						face_dir = LEFT;
-						edge_dir = LEFTNEXT;
+						edge_dir = LEFTPREV;
 					}
 					else if (edge->face[RIGHT] == face)
 					{
@@ -590,7 +590,7 @@ namespace CASD_PA2
 					if (edge->face[LEFT] == face)
 					{
 						face_dir = LEFT;
-						edge_dir = LEFTPREV;
+						edge_dir = LEFTNEXT;
 					}
 					else if (edge->face[RIGHT] == face)
 					{
@@ -681,7 +681,7 @@ namespace CASD_PA2
 		do
 		{
 			if (current->vertex[START] == vertex)
-				next = current->edge[LEFTNEXT];
+				next = current->edge[LEFTPREV];
 			else
 				next = current->edge[RIGHTNEXT];
 			
@@ -724,7 +724,7 @@ namespace CASD_PA2
 				if (current->vertex[START] == vertex)
 					next = current->edge[RIGHTPREV];
 				else
-					next = current->edge[LEFTPREV];
+					next = current->edge[LEFTNEXT];
 
 				if (!next) break;
 

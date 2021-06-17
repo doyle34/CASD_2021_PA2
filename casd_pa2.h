@@ -41,10 +41,6 @@ namespace CASD_PA2
 	{
 		static inline TopologyModel ship_model;
 	};
-	//struct GL_Model
-	//{
-	//	static TopologyModel gl_model;
-	//};
 	
 	TopologyModel BuildTopology(vector<vector<Vector3f>> offsettable);
 	vector<vector<FaceType>> EvaluateFaceTypes(vector<vector<Vector3f>> datapoints);

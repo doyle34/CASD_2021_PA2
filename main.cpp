@@ -15,9 +15,6 @@
 using namespace std;
 using namespace CASD_PA2;
 
-// void DrawShip();
-// DrawShape is a callback function for glDisplayFunc()
-// This function should be in form (void)func()
 void DrawShip();
 
 int main(int argc, char* argv[])
@@ -26,40 +23,12 @@ int main(int argc, char* argv[])
 	auto model = BuildTopology(offsettabledata);
 	ReconstructSurface(model);
 	GL_Object::ship_model = model;
-	// DrawAllSurface(model);
 	Visualization(argc, argv);
 }
 
 void DrawShip(/*do not add parameter here*/)
 {
-	/* draw ship hull here with
-	* glBegin(GL_Triangles),
-	* glVertex3f, glVertex3d,
-	* glEnd()
-	*/
 	DrawAllSurface(GL_Object::ship_model);
 	// DrawVertexes(GL_Object::ship_model);
 	// DrawCP(GL_Object::ship_model);
-
-	/* sample code !!*/
-	//glBegin(GL_TRIANGLES);
-	//glColor3f(1.0, 0.0, 0.75);
-
-	//glVertex3f(6.6f, 0.0f, 4.0f);
-	//glVertex3f(8.25f, 0.265f, 5.0f);
-	//glVertex3f(6.6f, 0.0f, 5.0f);
-
-	//glVertex3f(8.25f, 0.265f, 5.0f);
-	//glVertex3f(6.6f, 0.0f, 4.0f);
-	//glVertex3f(8.25f, 0.4665f, 4.0f);
-
-	//glVertex3f(6.6f, 0.0f, 5.0f);
-	//glVertex3f(8.25f, 0.265f, 5.0f);
-	//glVertex3f(8.25f, 0.0f, 6.0f);
-
-	//glVertex3d(-1, 1, 0);
-	//glVertex3d(1, 1, 0);
-	//glVertex3d(0, -1, 0);
-
-	//glEnd();
 }
